@@ -1,0 +1,21 @@
+import java.io.*;
+
+public class Test {
+    public static void main(String[] args) throws IOException {
+        FileInputStream invadersTest = null;
+        
+        try {
+	    invadersTest = new FileInputStream("invaders.h");
+            int avail = invadersTest.available();
+            byte[] bytes = invadersTest.read(bytes);
+            System.out.println(bytes);
+            System.out.println(avail);
+        } finally {
+            if (invadersTest == null){
+                invadersTest.close();
+            }
+        }
+
+        //System.out.println(avail);
+    }
+}
