@@ -1,6 +1,13 @@
 import java.io.*;
+import java.util.HashMap;
 
 class Disassembler8080 {
+    /*
+    Class for interpreting and executing the CPU opcodes that exists within the
+    ROM files.
+    */
+    
+    // Some quality-of-life methods
     void print(String str){
         System.out.println(str);
     }
@@ -17,6 +24,66 @@ class Disassembler8080 {
         op.append(String.format(" %02x", code));
         return op.toString();
     }
+
+    private interface Code {
+        public void execute(byte[] rom, int pointer);
+    }
+    public class OpCode implements Code {
+        String function;
+        int opbytes;
+        byte code;
+        byte[] buffer;
+
+        public OpCode(int byteSize, byte byteCode, String instruction){
+            this.opbytes = byteSize;
+            this.code = byteCode;
+            this.function = instruction;
+
+            if (this.opbytes > 1){
+                this.buffer = new byte[this.opbytes-1];
+            }
+        }
+
+        @Override
+        public void execute(byte[] rom, int pointer){
+            //Currently returns a string for testing purposes
+            if (this.opbytes == 1){
+                print(opbytes + " " + this.function);
+            }
+            else if (this.opbytes == 2){
+                buffer[0] = rom[pointer+1];
+                print(opbytes + " " + this.function + " " + 
+                    String.format("%02x", buffer));
+            }
+            else {
+                buffer[0] = rom[pointer+2];
+                buffer[1] = rom[pointer+1];
+                print(opbytes + " " + this.function + " " +
+                    String.format("%1$02x %2$02x", buffer[0], buffer[1]));
+            }
+        }
+    }
+
+    // Finally create the library to house all the opcodes.  Will probably
+    // also facilitate a factory handling design.  This might deprecate
+    // the current state of exOpCode
+    public class OpCodes {
+        HashMap<Byte, OpCode> opCodeLib = new HashMap<Byte, OpCode>();
+        
+        public OpCodes(){
+            opCodeLib.put((byte)0x00, new OpCode(1, (byte)0x00, "NOP"));
+            opCodeLib.put((byte)0x01, new OpCode(3, (byte)0x01, "LXI B"));
+        }
+
+        public void exOp(byte opCode, byte[] rom, int pointer){
+            String str = "Code not found";
+            if (opCodeLib.containsKey(opCode)){
+                opCodeLib.get(opCode).execute(rom, pointer);
+            }
+            else { print(str); }
+        }
+    }
+
 
     public int exOpCode(byte[] rom, int i){
         // There's really not a great way that I can see around a mega switch
