@@ -1,3 +1,4 @@
+package core;
 
 public class Memory {
     byte A = 0x00;

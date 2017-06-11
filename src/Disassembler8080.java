@@ -1,10 +1,14 @@
-class Disassembler8080 {
+package core;
+
+import java.util.HashMap;
+
+public class Disassembler8080 {
     /*
     Class for interpreting and executing the CPU opcodes that exists within the
     ROM files.
     */
 
-    OpCodes opLib = new OpCodes();
+    //OpCodes opLib = new OpCodes();
     
     // Some quality-of-life methods
     void print(String str){
@@ -24,7 +28,7 @@ class Disassembler8080 {
         return op.toString();
     }
 
-    public interface Code {
+    /*public interface Code {
         public void execute(byte[] rom, int pointer);
     }
     public class OpCode implements Code {
@@ -61,12 +65,46 @@ class Disassembler8080 {
                     String.format("%1$02x %2$02x", buffer[0], buffer[1]));
             }
         }
+    }*/
+
+    public interface OpCode {
+        /*
+        These will need access to the memory registers in the future, once
+        debugged.  Will need to pass the appropriate register address 
+        probably in the constructor.  Could probably also get away with a
+        'getReg' function within the Memory class
+        */
+       // String function;
+       // String reg;
+       // int opbytes;
+       // byte code;
+       // byte[] buffer;
+
+        public void printOp(byte[] rom, int pointer){}
+        public void execute(byte[] rom, int pointer){}
+    }
+
+    public class NOP implements OpCode {
+        public NOP(int byteSize, byte byteCode, String instruct, String reg){
+            this.opbytes = byteSize;
+            this.code = byteCode;
+            this.function = instruct;
+            this.reg = reg; //Will need to accept actualy reg addr in future
+        }
+
+        @Override
+        public void printOp(byte[] rom, int pointer){
+            print(this.opbytes + " " + this.function);
+        }
+
+        @Override
+        public void execute(byte[] rom, int pointer){;} //Empty for now
     }
 
     // Finally create the library to house all the opcodes.  Will probably
     // also facilitate a factory handling design.  This might deprecate
     // the current state of exOpCode
-    public class OpCodes {
+    /*public class OpCodes {
         HashMap<Byte, OpCode> opCodeLib = new HashMap<Byte, OpCode>();
         
         public OpCodes(){
@@ -81,7 +119,9 @@ class Disassembler8080 {
             }
             else { print(str); }
         }
-    }
+    }*/
+    HashMap<Byte, OpCode> opCodeLib = new HashMap<Byte, OpCode>();
+    opCodeLib.put((byte)0x00, new NOP(1, (byte)0x00, "NOP"));
 
 
     public int exOpCode(byte[] rom, int i){
@@ -101,6 +141,13 @@ class Disassembler8080 {
         }
 
         return opbytes;
+    }
+
+    public void printOp(byte buffer, byte[] rom, int i){
+        if (opCodeLib.containsKey(buffer)){
+            OpCode code = opCodeLib.get(buffer);
+            code.printOp(rom, i);
+        }
     }
 }
 

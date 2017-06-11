@@ -1,7 +1,8 @@
+package core;
+
 import java.io.*;
-import java.util.HashMap;
-import Memory
-import Disassembler8080
+import core.Memory;
+import core.Disassembler8080;
 
 
 public class EmuCore {
@@ -20,9 +21,10 @@ public class EmuCore {
             }
         }
         Disassembler8080 disassembler = new Disassembler8080();
-        for (int i = 0; i < romh.length; i++){
+        //for (int i = 0; i < romh.length; i++){
+        for (int i = 0; i < 2; i++){
             //int tmp = disassembler.exOpCode(romh, i);
-            disassembler.getOp(romh[i], romh, i);
+            disassembler.printOp(romh[i], romh, i); //DEBUG func
         }
         System.out.println(romh.length);
     }
