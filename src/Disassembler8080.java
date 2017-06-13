@@ -1,4 +1,4 @@
-package core;
+//package core;
 
 import java.util.HashMap;
 
@@ -80,11 +80,18 @@ public class Disassembler8080 {
        // byte code;
        // byte[] buffer;
 
-        public void printOp(byte[] rom, int pointer){}
-        public void execute(byte[] rom, int pointer){}
+        public void printOp(byte[] rom, int pointer);
+        public void execute(byte[] rom, int pointer);
     }
 
     public class NOP implements OpCode {
+        /*
+        The No Op class, when the CPU is fed an opcode it doesn't recognize
+        */
+        String function;
+        String reg;
+        int opbytes;
+        byte code;
         public NOP(int byteSize, byte byteCode, String instruct, String reg){
             this.opbytes = byteSize;
             this.code = byteCode;
@@ -120,8 +127,6 @@ public class Disassembler8080 {
             else { print(str); }
         }
     }*/
-    HashMap<Byte, OpCode> opCodeLib = new HashMap<Byte, OpCode>();
-    opCodeLib.put((byte)0x00, new NOP(1, (byte)0x00, "NOP"));
 
 
     public int exOpCode(byte[] rom, int i){
@@ -143,11 +148,35 @@ public class Disassembler8080 {
         return opbytes;
     }
 
+    public boolean opExists(byte buffer){
+        if (opCodeLib.containsKey(buffer)){
+            return true;
+        }
+        return false;
+    }
+
     public void printOp(byte buffer, byte[] rom, int i){
         if (opCodeLib.containsKey(buffer)){
             OpCode code = opCodeLib.get(buffer);
             code.printOp(rom, i);
         }
+        else {
+            print("Opcode not found");
+        }
+    }
+
+    // Declare Opcode hashmap and populate
+    HashMap<Byte, OpCode> opCodeLib = new HashMap<Byte, OpCode>();
+
+    public Disassembler8080(){//Will need to accept memory class in future
+        opCodeLib.put((byte)0x00, new NOP(1, (byte)0x00, "NOP", "None"));    
+    }
+
+    //Debug main, get rid when done
+    public static void main(String[] args){
+        Disassembler8080 test = new Disassembler8080();
+        System.out.println(test.opExists((byte)0x00));
+        System.out.println(test.opExists((byte)0x03));
     }
 }
 
