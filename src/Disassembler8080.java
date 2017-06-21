@@ -127,6 +127,7 @@ public class Disassembler8080 {
             str.append(this.opbytes);
             str.append(" ");
             str.append(this.function);
+            str.append(this.reg);
             String data = String.format(
                 "%1$02x%2$02x", 
                 rom[pointer+2], 
@@ -160,7 +161,7 @@ public class Disassembler8080 {
 
     public Disassembler8080(){//Will need to accept memory class in future
         opCodeLib.put((byte)0x00, new NOP(1, (byte)0x00, "NOP", "None"));
-        opCodeLib.put((byte)0x01, new LXI(3, (byte)0x01, "LXI B,", "None"));
+        opCodeLib.put((byte)0x01, new LXI(3, (byte)0x01, "LXI", "B"));
     }
 
     //Debug main, get rid when done
