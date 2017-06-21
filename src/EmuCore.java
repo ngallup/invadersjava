@@ -16,10 +16,8 @@ public class EmuCore {
             }
         }
         Disassembler8080 disassembler = new Disassembler8080();
-        //for (int i = 0; i < romh.length; i++){
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < romh.length; i++){
             //int tmp = disassembler.exOpCode(romh, i);
-            System.out.println("Index: " + i + ", " + romh[i]);
             disassembler.printOp(romh[i], romh, i); //DEBUG func
         }
         System.out.println(romh.length);

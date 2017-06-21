@@ -94,7 +94,7 @@ public class Disassembler8080 {
             this.opbytes = byteSize;
             this.code = byteCode;
             this.function = instruct;
-            this.reg = reg; //Will need to accept actualy reg addr in future
+            this.reg = reg; //Will need to accept actual reg addr in future
         }
 
         @Override
@@ -106,44 +106,35 @@ public class Disassembler8080 {
         public void execute(byte[] rom, int pointer){;} //Empty for now
     }
 
-    // Finally create the library to house all the opcodes.  Will probably
-    // also facilitate a factory handling design.  This might deprecate
-    // the current state of exOpCode
-    /*public class OpCodes {
-        HashMap<Byte, OpCode> opCodeLib = new HashMap<Byte, OpCode>();
-        
-        public OpCodes(){
-            opCodeLib.put((byte)0x00, new OpCode(1, (byte)0x00, "NOP"));
-            opCodeLib.put((byte)0x01, new OpCode(3, (byte)0x01, "LXI B"));
+    public class LXI implements OpCode {
+        /*
+        Loads 16-bit data/address into a register pair
+        */
+        String function;
+        String reg;
+        int opbytes;
+        byte code;
+        public LXI(int byteSize, byte byteCode, String instruct, String reg){
+            this.opbytes = byteSize;
+            this.code = byteCode;
+            this.function = instruct;
+            this.reg = reg;
         }
 
-        public void exOp(byte opCode, byte[] rom, int pointer){
-            String str = "Code not found";
-            if (opCodeLib.containsKey(opCode)){
-                opCodeLib.get(opCode).execute(rom, pointer);
-            }
-            else { print(str); }
+        @Override
+        public void printOp(byte[] rom, int pointer){
+            StringBuilder str = new StringBuilder();
+            str.append(this.opbytes);
+            str.append(" ");
+            str.append(this.function);
+            String data = String.format(
+                "%1$02x%2$02x", 
+                rom[pointer+2], 
+                rom[pointer+1]);
+            str.append(data);
+            print(str.toString());
         }
-    }*/
-
-
-    public int exOpCode(byte[] rom, int i){
-        // There's really not a great way that I can see around a mega switch
-        // without taking the minor performance hit from converting the byte
-        // to an int and using the Adapter design scheme
-        byte opcode = rom[i];
-        int opbytes = 1;
-        switch (opcode) {
-            case 0x00: print("NOP"); opbytes = 1; break;
-            //case 0x01: String op = String.format("LXI B %1$02x %2$02x", 
-            //                        rom[i+2], rom[i+1]);
-            case 0x01: String op = opString("LXI B", rom[i+1], rom[i+2]);
-                       opbytes = 3;
-                       print(op);
-                                    
-        }
-
-        return opbytes;
+        public void execute(byte[] rom, int pointer){;} //Empty for now 
     }
 
     public boolean opExists(byte buffer){
@@ -159,7 +150,8 @@ public class Disassembler8080 {
             code.printOp(rom, i);
         }
         else {
-            print("Opcode not found");
+            String op = String.format("%02x", buffer);
+            print("Opcode not found: " + op);
         }
     }
 
@@ -167,7 +159,8 @@ public class Disassembler8080 {
     HashMap<Byte, OpCode> opCodeLib = new HashMap<Byte, OpCode>();
 
     public Disassembler8080(){//Will need to accept memory class in future
-        opCodeLib.put((byte)0x00, new NOP(1, (byte)0x00, "NOP", "None"));    
+        opCodeLib.put((byte)0x00, new NOP(1, (byte)0x00, "NOP", "None"));
+        opCodeLib.put((byte)0x01, new LXI(3, (byte)0x01, "LXI B,", "None"));
     }
 
     //Debug main, get rid when done
