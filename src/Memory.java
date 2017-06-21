@@ -1,5 +1,3 @@
-package core;
-
 public class Memory {
     byte A = 0x00;
     byte B = 0x00;

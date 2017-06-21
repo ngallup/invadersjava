@@ -1,5 +1,3 @@
-//package core;
-
 import java.util.HashMap;
 
 public class Disassembler8080 {
