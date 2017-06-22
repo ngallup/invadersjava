@@ -72,11 +72,6 @@ public class Disassembler8080 {
         probably in the constructor.  Could probably also get away with a
         'getReg' function within the Memory class
         */
-       // String function;
-       // String reg;
-       // int opbytes;
-       // byte code;
-       // byte[] buffer;
 
         public void printOp(byte[] rom, int pointer);
         public void execute(byte[] rom, int pointer);
