@@ -77,14 +77,17 @@ public class Disassembler8080 {
         public void execute(byte[] rom, int pointer);
     }
 
-    public class NOP implements OpCode {
-        /*
-        The No Op class, when the CPU is fed an opcode it doesn't recognize
-        */
+    public abstract class OpCodeObj implements OpCode {
         String function;
         String reg;
         int opbytes;
         byte code;
+    }
+
+    public class NOP extends OpCodeObj {
+        /*
+        The No Op class, when the CPU is fed an opcode it doesn't recognize
+        */
         public NOP(int byteSize, byte byteCode, String instruct, String reg){
             this.opbytes = byteSize;
             this.code = byteCode;
@@ -101,14 +104,10 @@ public class Disassembler8080 {
         public void execute(byte[] rom, int pointer){;} //Empty for now
     }
 
-    public class LXI implements OpCode {
+    public class LXI extends OpCodeObj {
         /*
         Loads 16-bit data/address into a register pair
         */
-        String function;
-        String reg;
-        int opbytes;
-        byte code;
         public LXI(int byteSize, byte byteCode, String instruct, String reg){
             this.opbytes = byteSize;
             this.code = byteCode;
@@ -163,6 +162,7 @@ public class Disassembler8080 {
     public static void main(String[] args){
         Disassembler8080 test = new Disassembler8080();
         System.out.println(test.opExists((byte)0x00));
+        System.out.println(test.opExists((byte)0x01));
         System.out.println(test.opExists((byte)0x03));
     }
 }
