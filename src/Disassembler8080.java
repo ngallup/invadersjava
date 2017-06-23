@@ -127,9 +127,31 @@ public class Disassembler8080 {
                 rom[pointer+2], 
                 rom[pointer+1]);
             str.append(data);
-            print(str.toString());
+             print(str.toString());
         }
+
+        @Override
         public void execute(byte[] rom, int pointer){;} //Empty for now 
+    }
+
+    public class STAX extends OpCodeObj {
+        /*
+        Store accumulator (A) in address register pair
+        */
+        public STAX(int byteSize, byte byteCode, String instruct, String reg){
+            this.opbytes = byteSize;
+            this.code = byteCode;
+            this.function = instruct;
+            this.reg = reg;
+        }
+
+        @Override
+        public void printOp(byte[] rom, int pointer){
+            print(this.opbytes + " " + this.function + this.reg);
+        }
+
+        @Override
+        public void execute(byte[] rom, int pointer){;} //Fill later
     }
 
     public boolean opExists(byte buffer){
@@ -156,6 +178,7 @@ public class Disassembler8080 {
     public Disassembler8080(){//Will need to accept memory class in future
         opCodeLib.put((byte)0x00, new NOP(1, (byte)0x00, "NOP", "None"));
         opCodeLib.put((byte)0x01, new LXI(3, (byte)0x01, "LXI", "B"));
+        opCodeLib.put((byte)0x02, new STAX(1, (byte)0x02, "STAX", "B"));
     }
 
     //Debug main, get rid when done
@@ -163,6 +186,7 @@ public class Disassembler8080 {
         Disassembler8080 test = new Disassembler8080();
         System.out.println(test.opExists((byte)0x00));
         System.out.println(test.opExists((byte)0x01));
+        System.out.println(test.opExists((byte)0x02));
         System.out.println(test.opExists((byte)0x03));
     }
 }
