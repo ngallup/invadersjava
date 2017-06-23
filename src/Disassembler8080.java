@@ -154,6 +154,26 @@ public class Disassembler8080 {
         public void execute(byte[] rom, int pointer){;} //Fill later
     }
 
+    public class INX extends OpCodeObj {
+        /*
+        Increment the specified register pair by 1
+        */
+        public INX(int byteSize, byte byteCode, String instruct, String reg){
+            this.opbytes = byteSize;
+            this.code = byteCode;
+            this.function = instruct;
+            this.reg = reg;
+        }
+
+        @Override
+        public void printOp(byte[] rom, int pointer){
+            print(this.opbytes + " " + this.function + this.reg);
+        }
+        
+        @Override
+        public void execute(byte[] rom, int pointer){;} //Fill later
+    }
+
     public boolean opExists(byte buffer){
         if (opCodeLib.containsKey(buffer)){
             return true;
@@ -177,8 +197,9 @@ public class Disassembler8080 {
 
     public Disassembler8080(){//Will need to accept memory class in future
         opCodeLib.put((byte)0x00, new NOP(1, (byte)0x00, "NOP", "None"));
-        opCodeLib.put((byte)0x01, new LXI(3, (byte)0x01, "LXI", "B"));
-        opCodeLib.put((byte)0x02, new STAX(1, (byte)0x02, "STAX", "B"));
+        opCodeLib.put((byte)0x01, new LXI(3, (byte)0x01, "LXI", "BC"));
+        opCodeLib.put((byte)0x02, new STAX(1, (byte)0x02, "STAX", "BC"));
+        opCodeLib.put((byte)0x03, new INX(1, (byte)0x03, "INX +1", "BC"));
     }
 
     //Debug main, get rid when done
