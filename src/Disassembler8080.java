@@ -26,45 +26,6 @@ public class Disassembler8080 {
         return op.toString();
     }
 
-    /*public interface Code {
-        public void execute(byte[] rom, int pointer);
-    }
-    public class OpCode implements Code {
-        String function;
-        int opbytes;
-        byte code;
-        byte[] buffer;
-
-        public OpCode(int byteSize, byte byteCode, String instruction){
-            this.opbytes = byteSize;
-            this.code = byteCode;
-            this.function = instruction;
-
-            if (this.opbytes > 1){
-                this.buffer = new byte[this.opbytes-1];
-            }
-        }
-
-        @Override
-        public void execute(byte[] rom, int pointer){
-            //Currently returns a string for testing purposes
-            if (this.opbytes == 1){
-                print(opbytes + " " + this.function);
-            }
-            else if (this.opbytes == 2){
-                buffer[0] = rom[pointer+1];
-                print(opbytes + " " + this.function + " " + 
-                    String.format("%02x", buffer));
-            }
-            else {
-                buffer[0] = rom[pointer+2];
-                buffer[1] = rom[pointer+1];
-                print(opbytes + " " + this.function + " " +
-                    String.format("%1$02x %2$02x", buffer[0], buffer[1]));
-            }
-        }
-    }*/
-
     public interface OpCode {
         /*
         These will need access to the memory registers in the future, once
