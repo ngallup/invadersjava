@@ -226,7 +226,7 @@ public class Disassembler8080 {
         opCodeLib.put((byte)0x03, new INX(1, (byte)0x03, "INX +1", "BC"));
         opCodeLib.put((byte)0x04, new INR(1, (byte)0x04, "INR +1", "B"));
         opCodeLib.put((byte)0x05, new DCR(1, (byte)0x05, "DCR -1", "B"));
-        opCodeLib.put((byte)0x06, new MVI(1, (byte)0x06, "MVI", "B"));
+        opCodeLib.put((byte)0x06, new MVI(2, (byte)0x06, "MVI", "B"));
     }
 
     //Debug main, get rid when done
