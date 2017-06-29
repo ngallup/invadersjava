@@ -146,10 +146,10 @@ public class Disassembler8080 {
             this.reg = reg;
         }
         
-        @Override
-        public void printOp(byte[] rom, int pointer){
-            print(this.opbytes + " " + this.function + this.reg);
-        }
+       @Override
+       public void printOp(byte[] rom, int pointer){
+           print(this.opbytes + " " + this.function + this.reg);
+       }
 
        @Override
        public void execute(byte[] rom, int pointer){;} //Fill later
@@ -169,6 +169,29 @@ public class Disassembler8080 {
         @Override
         public void printOp(byte[] rom, int pointer){
             print(this.opbytes + " " + this.function + this.reg);
+        }
+
+        @Override
+        public void execute(byte[] rom, int pointer){;} //Fill later
+    }
+
+    public class MVI extends OpCodeObj {
+        /*
+        Copy byte to the specified register
+        */
+        public MVI(int byteSize, byte byteCode, String instruct, String reg){
+            this.opbytes = byteSize;
+            this.code = byteCode;
+            this.function = instruct;
+            this.reg = reg;
+        }
+
+        @Override
+        public void printOp(byte[] rom, int pointer){
+            String copyByte = String.format("%02x", rom[pointer+1]);
+            print(this.opbytes + " " + 
+                    this.function + this.reg + 
+                    " " + copyByte);
         }
 
         @Override
@@ -203,6 +226,7 @@ public class Disassembler8080 {
         opCodeLib.put((byte)0x03, new INX(1, (byte)0x03, "INX +1", "BC"));
         opCodeLib.put((byte)0x04, new INR(1, (byte)0x04, "INR +1", "B"));
         opCodeLib.put((byte)0x05, new DCR(1, (byte)0x05, "DCR -1", "B"));
+        opCodeLib.put((byte)0x06, new MVI(1, (byte)0x06, "MVI", "B"));
     }
 
     //Debug main, get rid when done
